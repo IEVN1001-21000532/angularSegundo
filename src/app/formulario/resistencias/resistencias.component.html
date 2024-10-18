@@ -1,0 +1,62 @@
+<div class="container mx-auto">
+  <div class="grid grid-cols-3 gap-4">
+    <!-- Columna1, aqui ponemos el color 1 y debajo los RADIOBOTONEEES -->
+    <div>
+      <label for="color1">Color 1:</label>
+      <select id="color1" [(ngModel)]="color1" class="block w-full p-2 border">
+        <option *ngFor="let color of colores" [value]="color">{{ color }}</option>
+      </select>
+      <div class="mt-4">
+        <label>Tolerancia:</label><br>
+        <label>
+          <input type="radio" name="tolerancia" [(ngModel)]="tolerancia" value="Oro"> Oro
+        </label>
+        <label class="ml-4">
+          <input type="radio" name="tolerancia" [(ngModel)]="tolerancia" value="Plata"> Plata
+        </label>
+      </div>
+    </div>
+    <!-- Columna2. con el segundo color USAR LISTAS DESPEGABLES -->
+    <div>
+      <label for="color2">Color 2:</label>
+      <select id="color2" [(ngModel)]="color2" class="block w-full p-2 border">
+        <option *ngFor="let color of colores" [value]="color">{{ color }}</option>
+      </select>
+    </div>
+    <!-- Columna3, donde se muestra el tercer color -->
+    <div>
+      <label for="color3">Color 3:</label>
+      <select id="color3" [(ngModel)]="color3" class="block w-full p-2 border">
+        <option *ngFor="let color of colores" [value]="color">{{ color }}</option>
+      </select>
+    </div>
+  </div><!-- +BOTONES-->
+  <button (click)="registrar()" class="mt-4 p-2 bg-red-500 text-white">Registrar</button>
+  <button (click)="imprimir()" class="ml-4 mt-4 p-2 bg-pink-500 text-white">Imprimir</button>
+
+ 
+  <table class="mt-4 w-full border-collapse" *ngIf="mostrarTabla && resistencias.length > 0">
+    <thead>
+      <tr>
+        <th class="border p-2">Color 1</th>
+        <th class="border p-2">Color 2</th>
+        <th class="border p-2">Color 3</th>
+        <th class="border p-2">Tolerancia</th>
+        <th class="border p-2">Valor</th>
+        <th class="border p-2">Valor Máximo</th>
+        <th class="border p-2">Valor Mínimo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let res of resistencias">
+        <td class="border p-2" [style.background]="obtenerColorHex(res.color1)">{{ res.color1 }}</td>
+        <td class="border p-2" [style.background]="obtenerColorHex(res.color2)">{{ res.color2 }}</td>
+        <td class="border p-2" [style.background]="obtenerColorHex(res.color3)">{{ res.color3 }}</td>
+        <td class="border p-2">{{ res.tolerancia === 'Oro' ? '5%' : '10%' }}</td>
+        <td class="border p-2">{{ res.valor }}</td>
+        <td class="border p-2">{{ res.valorMax }}</td>
+        <td class="border p-2">{{ res.valorMin }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

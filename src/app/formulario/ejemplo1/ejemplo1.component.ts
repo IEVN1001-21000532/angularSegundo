@@ -7,11 +7,6 @@ interface Usuario{
   email:string;
 }
 
-
-
-
-
-
 @Component({
   selector: 'app-ejemplo1',
   standalone: true,
@@ -19,7 +14,7 @@ interface Usuario{
   templateUrl: './ejemplo1.component.html',
   styles: ``
 })
-export /*default*/ class Ejemplo1Component implements OnInit{
+export default class Ejemplo1Component implements OnInit{
 
 
   formGroup!: FormGroup;
