@@ -9,6 +9,9 @@ interface Empleado {
   edad: number;
   horasTrabajadas: number;
   sueldo: number;
+  horasExtras: number;
+  sueldoPorHoras: number;
+  sueldoPorExtras: number;
 }
 
 @Component({
@@ -21,7 +24,7 @@ interface Empleado {
 export default class EmpleadosComponent {
   empleadoForm: FormGroup;
   empleados: Empleado[] = [];
-  mostrarTabla = false;  //igual que en resistencias, oculta la tabla
+  mostrarTabla = false;
 
   constructor(private fb: FormBuilder) {
     this.empleadoForm = this.fb.group({
@@ -37,20 +40,63 @@ export default class EmpleadosComponent {
   calcularSueldo(horasTrabajadas: number): number {
     const tarifaNormal = 70;
     const tarifaExtra = 140;
-    if (horasTrabajadas <= 40) {
-      return horasTrabajadas * tarifaNormal;
-    } else {
-      const horasExtras = horasTrabajadas - 40;
-      return (40 * tarifaNormal) + (horasExtras * tarifaExtra);
-    }
+    const horasPorPagar = horasTrabajadas <= 40 ? horasTrabajadas : 40;
+    const horasExtras = horasTrabajadas > 40 ? horasTrabajadas - 40 : 0;
+    return (horasPorPagar * tarifaNormal) + (horasExtras * tarifaExtra);
+  }
+
+  calcularSueldoPorHoras(horas: number): number {
+    return horas * 70;
+  }
+
+  calcularSueldoPorExtras(horasExtras: number): number {
+    return horasExtras * 140;
   }
 
   registrar(): void {
-    const nuevoEmpleado = { ...this.empleadoForm.value, sueldo: this.calcularSueldo(this.empleadoForm.value.horasTrabajadas) };
-    this.empleados.push(nuevoEmpleado);
+    const horasTrabajadas = this.empleadoForm.value.horasTrabajadas;
+    const horasExtras = horasTrabajadas > 40 ? horasTrabajadas - 40 : 0;
+
+    // aqui tengo que agregar la funcion matricula
+    const matricula = this.empleadoForm.value.matricula;
+    const index = this.empleados.findIndex(emp => emp.matricula === matricula);
+
+    if (index !== -1) {
+      this.empleados[index] = { 
+        ...this.empleadoForm.value, 
+        sueldo: this.calcularSueldo(horasTrabajadas),
+        horasExtras: horasExtras,
+        sueldoPorHoras: this.calcularSueldoPorHoras(horasTrabajadas <= 40 ? horasTrabajadas : 40),
+        sueldoPorExtras: this.calcularSueldoPorExtras(horasExtras)
+      };
+    } else {
+      const nuevoEmpleado = { 
+        ...this.empleadoForm.value, 
+        sueldo: this.calcularSueldo(horasTrabajadas),
+        horasExtras: horasExtras,
+        sueldoPorHoras: this.calcularSueldoPorHoras(horasTrabajadas <= 40 ? horasTrabajadas : 40),
+        sueldoPorExtras: this.calcularSueldoPorExtras(horasExtras)
+      };
+      this.empleados.push(nuevoEmpleado);
+    }
+
     localStorage.setItem('empleados', JSON.stringify(this.empleados));
     this.empleadoForm.reset();
-    this.mostrarTabla = false; 
+  }
+
+  modificar(): void {
+    const matricula = this.empleadoForm.value.matricula;
+    const empleado = this.empleados.find(emp => emp.matricula === matricula);
+
+    if (empleado) {
+      this.empleadoForm.patchValue({
+        matricula: empleado.matricula,
+        nombre: empleado.nombre,
+        correo: empleado.correo,
+        edad: empleado.edad,
+        horasTrabajadas: empleado.horasTrabajadas
+      });
+    }
   }
 
   imprimir(): void {
@@ -58,16 +104,7 @@ export default class EmpleadosComponent {
     if (storedEmpleados) {
       this.empleados = JSON.parse(storedEmpleados);
     }
-    this.mostrarTabla = true; 
-  }
-
-  modificar(): void {
-    const matricula = this.empleadoForm.value.matricula;
-    const index = this.empleados.findIndex(emp => emp.matricula === matricula);
-    if (index !== -1) {
-      this.empleados[index] = { ...this.empleadoForm.value, sueldo: this.calcularSueldo(this.empleadoForm.value.horasTrabajadas) };
-      localStorage.setItem('empleados', JSON.stringify(this.empleados));
-    }
+    this.mostrarTabla = true;
   }
 
   eliminar(matricula: string): void {

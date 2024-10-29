@@ -1,58 +1,70 @@
-<p>empleados dvsaworks!</p>
+<div class="container mx-auto p-6">
+  <div class="flex flex-wrap">
+   
+    <div class="w-full md:w-1/2 pr-4">
+      <form [formGroup]="empleadoForm" class="space-y-4">
+        <div>
+          <label for="matricula" class="block text-sm font-medium text-gray-700">Matrícula</label>
+          <input id="matricula" formControlName="matricula" class="block w-full p-2 border border-gray-300 rounded-md" type="text">
+        </div>
+        <div>
+          <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+          <input id="nombre" formControlName="nombre" class="block w-full p-2 border border-gray-300 rounded-md" type="text">
+        </div>
+        <div>
+          <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
+          <input id="correo" formControlName="correo" class="block w-full p-2 border border-gray-300 rounded-md" type="email">
+        </div>
+        <div>
+          <label for="edad" class="block text-sm font-medium text-gray-700">Edad</label>
+          <input id="edad" formControlName="edad" class="block w-full p-2 border border-gray-300 rounded-md" type="number">
+        </div>
+        <div>
+          <label for="horasTrabajadas" class="block text-sm font-medium text-gray-700">Horas Trabajadas</label>
+          <input id="horasTrabajadas" formControlName="horasTrabajadas" class="block w-full p-2 border border-gray-300 rounded-md" type="number">
+        </div>
+        <div class="flex space-x-4">
+          <button (click)="registrar()" type="button" class="bg-green-600 text-white px-4 py-2 rounded">Registrar</button>
+          <button (click)="imprimir()" type="button" class="bg-yellow-600 text-white px-4 py-2 rounded">Imprimir</button>
+        </div>
+      </form>
+    </div>
 
-<div class="container mx-auto">
-    <form [formGroup]="empleadoForm">
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label for="matricula">Matrícula:</label>
-          <input id="matricula" formControlName="matricula" class="block w-full p-2 border" type="text">
-        </div>
-        <div>
-          <label for="nombre">Nombre:</label>
-          <input id="nombre" formControlName="nombre" class="block w-full p-2 border" type="text">
-        </div>
-        <div>
-          <label for="correo">Correo:</label>
-          <input id="correo" formControlName="correo" class="block w-full p-2 border" type="email">
-        </div>
-        <div>
-          <label for="edad">Edad:</label>
-          <input id="edad" formControlName="edad" class="block w-full p-2 border" type="number">
-        </div>
-        <div>
-          <label for="horasTrabajadas">Horas Trabajadas:</label>
-          <input id="horasTrabajadas" formControlName="horasTrabajadas" class="block w-full p-2 border" type="number">
-        </div>
+   
+    <div class="w-full md:w-1/2 pl-4">
+      <table *ngIf="mostrarTabla" class="min-w-full bg-white border border-gray-300 mt-6">
+        <thead>
+          <tr class="bg-gray-200 text-left">
+            <th class="border px-4 py-2">Matrícula</th>
+            <th class="border px-4 py-2">Nombre</th>
+            <th class="border px-4 py-2">Correo</th>
+            <th class="border px-4 py-2">Edad</th>
+            <th class="border px-4 py-2">Horas Trabajadas</th>
+            <th class="border px-4 py-2">Horas Extras</th>
+            <th class="border px-4 py-2">Sueldo por Horas Normales</th>
+            <th class="border px-4 py-2">Sueldo por Horas Extras</th>
+            <th class="border px-4 py-2">Sueldo Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of empleados" class="hover:bg-gray-100">
+            <td class="border px-4 py-2">{{ emp.matricula }}</td>
+            <td class="border px-4 py-2">{{ emp.nombre }}</td>
+            <td class="border px-4 py-2">{{ emp.correo }}</td>
+            <td class="border px-4 py-2">{{ emp.edad }}</td>
+            <td class="border px-4 py-2">{{ emp.horasTrabajadas }}</td>
+            <td class="border px-4 py-2">{{ emp.horasExtras }}</td>
+            <td class="border px-4 py-2">{{ emp.sueldoPorHoras }}</td>
+            <td class="border px-4 py-2">{{ emp.sueldoPorExtras }}</td>
+            <td class="border px-4 py-2">{{ emp.sueldo }}</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="flex justify-end mt-4">
+        <button (click)="modificar()" type="button" class="bg-blue-600 text-white px-4 py-2 rounded mr-2">Modificar</button>
+        <button (click)="eliminar(empleadoForm.value.matricula)" type="button" class="bg-red-600 text-white px-4 py-2 rounded">Eliminar</button>
       </div>
-      <div class="mt-4">
-        <button (click)="registrar()" type="button" class="p-2 bg-pink-600 text-white rounded">Registrar</button>
-        <button (click)="modificar()" type="button" class="ml-2 p-2 bg-purple-600 text-white rounded">Modificar</button>
-        <button (click)="eliminar(empleadoForm.value.matricula)" type="button" class="ml-2 p-2 bg-pink-600 text-white rounded">Eliminar</button>
-        <button (click)="imprimir()" type="button" class="ml-2 p-2 bg-purple-600 text-white rounded">Imprimir</button>
-      </div>
-    </form>
-  
-    <table *ngIf="mostrarTabla" class="mt-6 w-full border-collapse">
-      <thead class="bg-gray-200">
-        <tr>
-          <th class="border p-2">Matrícula</th>
-          <th class="border p-2">Nombre</th>
-          <th class="border p-2">Correo</th>
-          <th class="border p-2">Edad</th>
-          <th class="border p-2">Horas Trabajadas</th>
-          <th class="border p-2">Sueldo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let emp of empleados">
-          <td class="border p-2">{{ emp.matricula }}</td>
-          <td class="border p-2">{{ emp.nombre }}</td>
-          <td class="border p-2">{{ emp.correo }}</td>
-          <td class="border p-2">{{ emp.edad }}</td>
-          <td class="border p-2">{{ emp.horasTrabajadas }}</td>
-          <td class="border p-2">{{ emp.sueldo }}</td>
-        </tr>
-      </tbody>
-    </table>
+    </div>
   </div>
-  
+</div>
