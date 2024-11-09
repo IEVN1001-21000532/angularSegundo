@@ -57,7 +57,7 @@ export default class EmpleadosComponent {
     const horasTrabajadas = this.empleadoForm.value.horasTrabajadas;
     const horasExtras = horasTrabajadas > 40 ? horasTrabajadas - 40 : 0;
 
-    // aqui tengo que agregar la funcion matricula
+    // aquí tengo que agregar la función matrícula
     const matricula = this.empleadoForm.value.matricula;
     const index = this.empleados.findIndex(emp => emp.matricula === matricula);
 
@@ -82,6 +82,8 @@ export default class EmpleadosComponent {
 
     localStorage.setItem('empleados', JSON.stringify(this.empleados));
     this.empleadoForm.reset();
+    // Asegúrate de que la tabla no se muestre después de registrar
+    this.mostrarTabla = false; 
   }
 
   modificar(): void {
@@ -104,7 +106,8 @@ export default class EmpleadosComponent {
     if (storedEmpleados) {
       this.empleados = JSON.parse(storedEmpleados);
     }
-    this.mostrarTabla = true;
+    // Muestra la tabla solo al imprimir
+    this.mostrarTabla = true; 
   }
 
   eliminar(matricula: string): void {
@@ -117,5 +120,10 @@ export default class EmpleadosComponent {
     if (storedEmpleados) {
       this.empleados = JSON.parse(storedEmpleados);
     }
+  }
+
+  // Método para calcular el total de sueldos
+  calcularTotalSueldos(): number {
+    return this.empleados.reduce((total, emp) => total + emp.sueldo, 0);
   }
 }

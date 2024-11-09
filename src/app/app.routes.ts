@@ -17,4 +17,9 @@ export const routes: Routes = [
     path: 'formulario',
     loadChildren:()=> import('./formulario/empleados/empleados.routes')
   },
+
+  {
+    path: 'formulario',
+    loadChildren:()=> import('./formulario/tabla-pedidos/tabla-pedidos.routes')
+  },
 ];

@@ -1,0 +1,134 @@
+
+<style>
+  body { background-color: #1966ad; /* Cambia este color al que prefieras */ }
+</style>
+<p class="text-center text-3xl font-bold text-blue-600 mb-6">BIENVENIDO A FREDDY'S PIZZERIA</p>
+
+<div class="flex flex-col items-center">
+  <div class="w-full max-w-lg p-8 bg-red-200 rounded-xl shadow-lg mb-8">
+    <h2 class="text-2xl font-extrabold text-center text-pink-600 mb-6">PREPARA TU PIZZA</h2>
+
+    <form [formGroup]="orderForm" (ngSubmit)="onAddOrder()">
+      <div class="mb-5">
+        <label for="orderDate" class="block text-lg font-medium text-gray-900">Fecha de compra</label>
+        <input type="date" id="orderDate" formControlName="orderDate" 
+          class="mt-2 block w-full px-5 py-3 border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500" [disabled]="true">
+      </div>
+
+      <div class="mb-5">
+        <label class="block text-lg font-medium text-gray-900">Tamaño de la pizza</label>
+        <div class="space-x-6 flex">
+          <div *ngFor="let size of pizzaSizes" class="flex items-center">
+            <input type="radio" [id]="size" formControlName="pizzaSize" [value]="size" 
+              class="h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-500" required>
+            <label [for]="size" class="ml-2 text-lg">{{ size }}</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-5" formGroupName="toppings">
+        <label class="block text-lg font-medium text-gray-900">Sabor</label>
+        <div class="space-x-6 flex">
+          <div *ngFor="let topping of toppingsAvailable" class="flex items-center">
+            <input type="checkbox" [id]="topping" [formControlName]="topping" 
+              class="h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-500">
+            <label [for]="topping" class="ml-2 text-lg">{{ topping }}</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <label for="amount" class="block text-lg font-medium text-gray-900">Cantidad</label>
+        <input type="number" id="amount" formControlName="amount" 
+          class="mt-2 block w-full px-5 py-3 border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500" min="1" required>
+      </div>
+
+      <div class="mb-5">
+        <label for="clientName" class="block text-lg font-medium text-gray-900">Nombre</label>
+        <input type="text" id="clientName" formControlName="clientName" 
+          class="mt-2 block w-full px-5 py-3 border border-purple-400 rounded-md shadow-sm focus:ring-2 focus:ring-pink-500" required>
+      </div>
+
+      <div class="mb-5">
+        <label for="clientAddress" class="block text-lg font-medium text-gray-900">Dirección</label>
+        <input type="text" id="clientAddress" formControlName="clientAddress" 
+          class="mt-2 block w-full px-5 py-3 border border-red-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500" required>
+      </div>
+
+      <div class="mb-5">
+        <label for="clientPhone" class="block text-lg font-medium text-gray-900">Celular</label>
+        <input type="tel" id="clientPhone" formControlName="clientPhone" 
+          class="mt-2 block w-full px-5 py-3 border border-pink-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500" required>
+      </div>
+
+      <button type="submit" 
+        class="w-full py-3 mt-5 bg-purple-600 text-white font-semibold rounded-md shadow-md hover:bg-pink-700">Añadir orden</button>
+    </form>
+  </div>
+
+  <div class="flex w-full justify-between">
+    <div class="w-1/2 pr-4">
+      <!-- Tabla de órdenes actuales -->
+      <div *ngIf="pizzaOrders.length > 0">
+        <h3 class="text-xl font-bold text-green-600 mb-4">ORDENES</h3>
+        <table class="min-w-full border border-gray-400 rounded-lg overflow-hidden">
+          <thead class="bg-pink-600 text-white">
+            <tr>
+              <th class="py-2 px-4">Tamaño</th>
+              <th class="py-2 px-4">Sabores</th>
+              <th class="py-2 px-4">Cantidad</th>
+              <th class="py-2 px-4">Costo</th>
+              <th class="py-2 px-4">Estatus</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of pizzaOrders; let i = index" class="border-b border-gray-300">
+              <td class="py-2 px-4">{{ order.orderDetails.pizzaSize }}</td>
+              <td class="py-2 px-4">{{ order.orderDetails.toppings.join(', ') }}</td>
+              <td class="py-2 px-4">{{ order.orderDetails.amount }}</td>
+              <td class="py-2 px-4">{{ order.totalCost | currency }}</td>
+              <td class="py-2 px-4">
+                <button (click)="removeOrder(i)" 
+                  class="text-red-500 hover:text-red-700 font-semibold">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-4 text-right font-bold text-gray-900">Total: {{ overallTotal | currency }}</div>
+        <button (click)="completeOrder()" 
+          class="mt-5 w-full py-3 bg-yellow-600 text-white font-semibold rounded-md shadow-md hover:bg-black-700">Completar orden</button>
+      </div>
+    </div>
+
+    <div class="w-1/2 pl-4">
+      <!-- Filtro y resultados de ventas diarias -->
+      <h3 class="text-xl font-bold text-blue-600 mb-4">Pedidos</h3>
+      <div class="flex items-center space-x-4">
+        <label for="dailySalesDate" class="text-lg font-medium text-gray-900">Fecha de compra:</label>
+        <input type="date" #dailySalesDate 
+          class="block px-5 py-3 border border-gray-400 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500">
+        <button (click)="fetchDailySales()" 
+          class="py-3 px-6 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-pink-700">Ver ventas</button>
+      </div>
+      <div *ngIf="dailySalesData.length > 0" class="mt-6">
+        <table class="min-w-full border border-gray-400 rounded-lg overflow-hidden">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="py-2 px-4">Fecha</th>
+              <th class="py-2 px-4">Cliente</th>
+              <th class="py-2 px-4">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sale of dailySalesData" class="border-b border-gray-300">
+              <td class="py-2 px-4">{{ sale.orderDate }}</td>
+              <td class="py-2 px-4">{{ sale.clientName }}</td>
+              <td class="py-2 px-4">{{ sale.totalAmount | currency }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p *ngIf="dailySalesData.length === 0" class="text-center text-gray-700 mt-4">No hay ventas aun.</p>
+    </div>
+  </div>
+</div>

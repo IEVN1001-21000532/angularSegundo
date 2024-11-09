@@ -1,6 +1,5 @@
 <div class="container mx-auto p-6">
   <div class="flex flex-wrap">
-   
     <div class="w-full md:w-1/2 pr-4">
       <form [formGroup]="empleadoForm" class="space-y-4">
         <div>
@@ -30,7 +29,6 @@
       </form>
     </div>
 
-   
     <div class="w-full md:w-1/2 pl-4">
       <table *ngIf="mostrarTabla" class="min-w-full bg-white border border-gray-300 mt-6">
         <thead>
@@ -59,6 +57,12 @@
             <td class="border px-4 py-2">{{ emp.sueldo }}</td>
           </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="8" class="border px-4 py-2 text-right font-bold">Total Sueldos</td>
+            <td class="border px-4 py-2">{{ calcularTotalSueldos() }}</td>
+          </tr>
+        </tfoot>
       </table>
       
       <div class="flex justify-end mt-4">
