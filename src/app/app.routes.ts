@@ -22,4 +22,11 @@ export const routes: Routes = [
     path: 'formulario',
     loadChildren:()=> import('./formulario/tabla-pedidos/tabla-pedidos.routes')
   },
+
+  {
+    path: 'utl',
+    loadChildren:()=> import('./utl/utl.routes')
+  },
+  
+  
 ];

@@ -1,0 +1,79 @@
+<div class="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
+    <h3 class="text-xl font-semibold mb-4 text-center">Captura de Pedido</h3>
+
+    <form [formGroup]="pedidoForm" (ngSubmit)="agregarPizza()">
+        <div class="mb-4">
+            <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                placeholder="Nombre completo"
+                formControlName="nombreCliente"/>
+        </div>
+
+        <div class="mb-4">
+            <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                placeholder="Dirección"
+                formControlName="direccion"/>
+        </div>
+
+        <div class="mb-4">
+            <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                placeholder="Teléfono"
+                formControlName="telefono"/>
+        </div>
+
+        <div class="mb-4">
+            <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="date"
+                placeholder="Fecha de compra"
+                formControlName="fechaCompra"/>
+        </div>
+
+        <h4 class="text-lg font-semibold mt-6 mb-2">Tamaño de Pizza</h4>
+        <div class="flex items-center gap-4 mb-4">
+            <label class="flex items-center">
+                <input type="radio" formControlName="tamanoPizza" value="Chica" class="mr-2" />
+                Chica $40
+            </label>
+            <label class="flex items-center">
+                <input type="radio" formControlName="tamanoPizza" value="Mediana" class="mr-2" />
+                Mediana $80
+            </label>
+            <label class="flex items-center">
+                <input type="radio" formControlName="tamanoPizza" value="Grande" class="mr-2" />
+                Grande $120
+            </label>
+        </div>
+
+        <h4 class="text-lg font-semibold mt-6 mb-2">Ingredientes</h4>
+        <div class="flex flex-col gap-2 mb-4">
+            <label class="flex items-center">
+                <input type="checkbox" formControlName="jamon" class="mr-2" />
+                Jamón $10
+            </label>
+            <label class="flex items-center">
+                <input type="checkbox" formControlName="pina" class="mr-2" />
+                Piña $10
+            </label>
+            <label class="flex items-center">
+                <input type="checkbox" formControlName="champinones" class="mr-2" />
+                Champiñones $10
+            </label>
+        </div>
+
+        <div class="mb-4">
+            <input
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="number"
+                placeholder="Número de Pizzas"
+                formControlName="cantidadPizzas"
+            />
+        </div>
+
+        <button
+            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md"
+            type="submit">Agregar
+        </button>
+    </form>
+</div>
