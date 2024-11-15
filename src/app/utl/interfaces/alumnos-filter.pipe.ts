@@ -12,3 +12,4 @@ export class AlumnosFilterPipe implements PipeTransform {
   }
 
 }
+ 
